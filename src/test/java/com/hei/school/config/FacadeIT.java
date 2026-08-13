@@ -1,5 +1,4 @@
 package com.hei.school.config;
-
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 import com.hei.school.PojaGenerated;
@@ -17,7 +16,6 @@ public class FacadeIT {
   @SneakyThrows
   @DynamicPropertySource
   static void configureProperties(DynamicPropertyRegistry registry) {
-
     new BucketConf().configureProperties(registry);
     new EmailConf().configureProperties(registry);
 
