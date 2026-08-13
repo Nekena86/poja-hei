@@ -1,4 +1,4 @@
-package com.hei.school.conf;
+package com.hei.school.config;
 
 import com.hei.school.PojaGenerated;
 import org.springframework.test.context.DynamicPropertyRegistry;

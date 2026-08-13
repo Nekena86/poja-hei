@@ -1,4 +1,4 @@
-package com.hei.school.conf;
+package com.hei.school.config;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -22,7 +22,7 @@ public class FacadeIT {
     new EmailConf().configureProperties(registry);
 
     try {
-      var envConfClazz = Class.forName("com.hei.school.conf.EnvConf");
+      var envConfClazz = Class.forName("com.hei.school.config.EnvConf");
       var envConfConfigureProperties =
           envConfClazz.getDeclaredMethod("configureProperties", DynamicPropertyRegistry.class);
       var envConf = envConfClazz.getConstructor().newInstance();
