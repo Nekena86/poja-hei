@@ -4,9 +4,8 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 public record GradeHistoryView(
-        BigDecimal previousValue,
-        BigDecimal newValue,
-        String reason,
-        String changedBy,
-        Instant changedAt) {}
-
+    BigDecimal previousValue,
+    BigDecimal newValue,
+    String reason,
+    String changedBy,
+    Instant changedAt) {}

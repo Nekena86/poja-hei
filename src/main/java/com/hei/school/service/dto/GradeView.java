@@ -5,10 +5,9 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record GradeView(
-        UUID id,
-        String examRef,
-        String courseTitle,
-        BigDecimal coefficient,
-        BigDecimal value,
-        Instant lastModifiedAt) {}
-
+    UUID id,
+    String examRef,
+    String courseTitle,
+    BigDecimal coefficient,
+    BigDecimal value,
+    Instant lastModifiedAt) {}
