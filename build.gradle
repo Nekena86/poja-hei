@@ -152,6 +152,10 @@ dependencies {
     testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0'
     implementation("io.github.cdimascio:java-dotenv:4.1.0")
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.apache.poi:poi-ooxml:5.3.0'
+    implementation 'org.apache.pdfbox:pdfbox:2.0.31'
+    implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+
 
 
 
