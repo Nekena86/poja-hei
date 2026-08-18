@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Promotions</title>
+</head>
+<body>
+<h1>Liste des promotions</h1>
+
+<table border="1" cellpadding="6">
+    <thead>
+    <tr>
+        <th>Promotion (annee d'entree)</th>
+        <th>Liste des diplomes</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="year : ${promotionYears}">
+        <td th:text="${year}">2024</td>
+        <td>
+            <form method="get" th:action="@{'/api/promotions/' + ${year} + '/graduates.xlsx'}">
+                <button type="submit">Telecharger la liste des diplomes (Excel)</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<p th:if="${#lists.isEmpty(promotionYears)}">Aucune promotion enregistree pour le moment.</p>
+</body>
+</html>

@@ -33,4 +33,11 @@ public class Exam {
 
   @Column(nullable = false)
   private BigDecimal coefficient;
+
+  /**
+   * Which of the promotion's three years this exam belongs to (1, 2 or 3). Needed to report a
+   * promotion's results year by year, which a date alone cannot tell us.
+   */
+  @Column(name = "academic_year", nullable = false)
+  private int academicYear;
 }
