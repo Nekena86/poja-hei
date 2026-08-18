@@ -1,41 +1,35 @@
 package com.hei.school.file.bucket;
 
-import java.nio.file.Path;
+import com.hei.school.PojaGenerated;
+import lombok.Getter;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.transfer.s3.S3TransferManager;
 
+@PojaGenerated
 @Configuration
 public class BucketConf {
 
-  @Bean
-  @ConditionalOnProperty(name = "app.bucket.transport", havingValue = "s3", matchIfMissing = true)
-  public S3Client s3Client(@Value("${aws.region}") String region) {
-    return S3Client.builder().region(Region.of(region)).build();
-  }
+  @Getter private final String bucketName;
+  @Getter private final S3TransferManager s3TransferManager;
+  @Getter private final S3Presigner s3Presigner;
+  @Getter private final S3Client s3Client;
 
-  @Bean
-  @ConditionalOnProperty(name = "app.bucket.transport", havingValue = "s3", matchIfMissing = true)
-  public S3Presigner s3Presigner(@Value("${aws.region}") String region) {
-    return S3Presigner.builder().region(Region.of(region)).build();
-  }
-
-  @Bean
-  @ConditionalOnProperty(name = "app.bucket.transport", havingValue = "s3", matchIfMissing = true)
-  public BucketComponent s3BucketComponent(
-      S3Client s3Client, S3Presigner s3Presigner, @Value("${aws.s3.bucket}") String bucket) {
-    return new S3BucketComponent(s3Client, s3Presigner, bucket);
-  }
-
-  @Bean
-  @ConditionalOnProperty(name = "app.bucket.transport", havingValue = "local")
-  public BucketComponent localBucketComponent(
-      @Value("${app.bucket.local-dir:${java.io.tmpdir}/hei-bucket}") String dir,
-      @Value("${aws.s3.bucket}") String bucket) {
-    return new LocalBucketComponent(Path.of(dir), bucket);
+  @SneakyThrows
+  public BucketConf(
+      @Value("eu-west-3") String regionString, @Value("${aws.s3.bucket}") String bucketName) {
+    this.bucketName = bucketName;
+    var region = Region.of(regionString);
+    this.s3TransferManager =
+        S3TransferManager.builder()
+            .s3Client(S3AsyncClient.crtBuilder().region(region).build())
+            .build();
+    this.s3Presigner = S3Presigner.builder().region(region).build();
+    this.s3Client = S3Client.builder().region(region).build();
   }
 }
