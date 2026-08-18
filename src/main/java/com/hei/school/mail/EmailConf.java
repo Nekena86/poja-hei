@@ -15,14 +15,9 @@ public class EmailConf {
   @Getter private final String sesSource;
   private final Region region;
 
-  /**
-   * In the SES sandbox both the sender and the recipient must be verified identities, so the sender
-   * has to be configurable per environment.
-   */
-  public EmailConf(
-      @Value("${aws.ses.source}") String sesSource, @Value("${aws.region}") String region) {
+  public EmailConf(@Value("noreply@poja.io") String sesSource, @Value("eu-west-3") Region region) {
     this.sesSource = sesSource;
-    this.region = Region.of(region);
+    this.region = region;
   }
 
   @Bean
