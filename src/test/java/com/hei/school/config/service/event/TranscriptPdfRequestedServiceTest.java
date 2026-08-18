@@ -61,7 +61,7 @@ class TranscriptPdfRequestedServiceTest {
     File pdf = File.createTempFile("test-transcript", ".pdf");
     when(pdfTranscriptService.generate(student)).thenReturn(pdf);
     when(bucketComponent.presign(anyString(), any(Duration.class)))
-        .thenReturn(URI.create("https://bucket.example/transcript.pdf"));
+            .thenReturn(URI.create("https://bucket.example/transcript.pdf").toURL());
 
     var event =
         TranscriptPdfRequested.builder()
