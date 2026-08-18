@@ -1,5 +1,6 @@
 package com.hei.school.config;
 
+import jakarta.servlet.DispatcherType;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +39,12 @@ public class SecurityConfig {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/promotions/**")
+                // Rendering an error page is an internal ERROR dispatch. Without this it is
+                // itself rejected as unauthenticated, the body stays empty, and the browser
+                // shows a blank page instead of "401 Unauthorized".
+                auth.dispatcherTypeMatchers(DispatcherType.ERROR)
+                    .permitAll()
+                    .requestMatchers("/promotions/**")
                     .hasAnyRole("ADMIN", "TEACHER")
                     .requestMatchers("/api/**")
                     .authenticated()

@@ -43,7 +43,7 @@ public class PdfTranscriptService {
         content.setFont(bodyFont, 11);
         content.newLineAtOffset(50, y);
         content.showText(
-                student.getFirstName() + " " + student.getLastName() + " (" + student.getEmail() + ")");
+            student.getFirstName() + " " + student.getLastName() + " (" + student.getEmail() + ")");
         content.endText();
 
         y -= 30;
@@ -51,7 +51,7 @@ public class PdfTranscriptService {
         content.setFont(titleFont, 10);
         content.newLineAtOffset(50, y);
         content.showText(
-                String.format("%-30s %-12s %-10s %-6s", "Cours", "Examen", "Coeff.", "Note"));
+            String.format("%-30s %-12s %-10s %-6s", "Cours", "Examen", "Coeff.", "Note"));
         content.endText();
 
         for (TranscriptLine line : lines) {
@@ -63,12 +63,12 @@ public class PdfTranscriptService {
           content.setFont(bodyFont, 10);
           content.newLineAtOffset(50, y);
           content.showText(
-                  String.format(
-                          "%-30s %-12s %-10s %-6s",
-                          truncate(line.courseTitle(), 30),
-                          line.examRef(),
-                          line.coefficient(),
-                          line.value()));
+              String.format(
+                  "%-30s %-12s %-10s %-6s",
+                  truncate(line.courseTitle(), 30),
+                  line.examRef(),
+                  line.coefficient(),
+                  line.value()));
           content.endText();
         }
       }

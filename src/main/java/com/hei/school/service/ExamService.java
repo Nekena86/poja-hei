@@ -18,49 +18,49 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class ExamService {
 
-    private final ExamRepository examRepository;
-    private final CourseTeachingRepository courseTeachingRepository;
+  private final ExamRepository examRepository;
+  private final CourseTeachingRepository courseTeachingRepository;
 
-    @Transactional
-    public ExamView create(CreateExamRequest request, User requester) {
-        CourseTeaching teaching =
-                courseTeachingRepository
-                        .findById(request.courseTeachingId())
-                        .orElseThrow(
-                                () ->
-                                        new ResourceNotFoundException(
-                                                "Course teaching not found: " + request.courseTeachingId()));
+  @Transactional
+  public ExamView create(CreateExamRequest request, User requester) {
+    CourseTeaching teaching =
+        courseTeachingRepository
+            .findById(request.courseTeachingId())
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException(
+                        "Course teaching not found: " + request.courseTeachingId()));
 
-        boolean isOwningTeacher =
-                requester.getRole() == Role.TEACHER
-                        && teaching.getTeacher().getId().equals(requester.getId());
-        if (requester.getRole() != Role.ADMIN && !isOwningTeacher) {
-            throw new ForbiddenOperationException(
-                    "Only an admin or the teacher of this course can create its exams");
-        }
-        if (examRepository.existsByRef(request.ref())) {
-            throw new IllegalArgumentException("An exam already exists with ref " + request.ref());
-        }
-
-        Exam saved =
-                examRepository.save(
-                        Exam.builder()
-                                .ref(request.ref())
-                                .courseTeaching(teaching)
-                                .dateExam(request.dateExam())
-                                .coefficient(request.coefficient())
-                                .academicYear(request.academicYear())
-                                .build());
-        return toView(saved);
+    boolean isOwningTeacher =
+        requester.getRole() == Role.TEACHER
+            && teaching.getTeacher().getId().equals(requester.getId());
+    if (requester.getRole() != Role.ADMIN && !isOwningTeacher) {
+      throw new ForbiddenOperationException(
+          "Only an admin or the teacher of this course can create its exams");
+    }
+    if (examRepository.existsByRef(request.ref())) {
+      throw new IllegalArgumentException("An exam already exists with ref " + request.ref());
     }
 
-    public static ExamView toView(Exam exam) {
-        return new ExamView(
-                exam.getId(),
-                exam.getRef(),
-                exam.getCourseTeaching().getCourse().getTitle(),
-                exam.getDateExam(),
-                exam.getCoefficient(),
-                exam.getAcademicYear());
-    }
+    Exam saved =
+        examRepository.save(
+            Exam.builder()
+                .ref(request.ref())
+                .courseTeaching(teaching)
+                .dateExam(request.dateExam())
+                .coefficient(request.coefficient())
+                .academicYear(request.academicYear())
+                .build());
+    return toView(saved);
+  }
+
+  public static ExamView toView(Exam exam) {
+    return new ExamView(
+        exam.getId(),
+        exam.getRef(),
+        exam.getCourseTeaching().getCourse().getTitle(),
+        exam.getDateExam(),
+        exam.getCoefficient(),
+        exam.getAcademicYear());
+  }
 }

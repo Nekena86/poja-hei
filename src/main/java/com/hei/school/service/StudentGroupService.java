@@ -18,6 +18,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Groups, and which group a student belongs to over time. A student can move at any point: the
+ * previous assignment is closed on the effective date and a new one opens, so the whole path stays
+ * readable.
+ */
 @Service
 @AllArgsConstructor
 public class StudentGroupService {
@@ -37,13 +42,13 @@ public class StudentGroupService {
   @Transactional(readOnly = true)
   public List<GroupView> listGroups() {
     return groupRepository.findAll().stream()
-            .map(g -> new GroupView(g.getId(), g.getRef()))
-            .toList();
+        .map(g -> new GroupView(g.getId(), g.getRef()))
+        .toList();
   }
 
   @Transactional
   public GroupAssignmentView changeGroup(
-          User student, UUID newGroupId, LocalDate effectiveDate, User requester) {
+      User student, UUID newGroupId, LocalDate effectiveDate, User requester) {
     if (requester.getRole() != Role.ADMIN) {
       throw new ForbiddenOperationException("Only admins can change a student's group");
     }
@@ -51,48 +56,48 @@ public class StudentGroupService {
       throw new IllegalArgumentException("Only students belong to groups");
     }
     Group newGroup =
-            groupRepository
-                    .findById(newGroupId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Group not found: " + newGroupId));
+        groupRepository
+            .findById(newGroupId)
+            .orElseThrow(() -> new ResourceNotFoundException("Group not found: " + newGroupId));
 
     historyRepository
-            .findByStudentAndEndDateIsNull(student)
-            .ifPresent(
-                    current -> {
-                      current.setEndDate(effectiveDate);
-                      historyRepository.save(current);
-                    });
+        .findByStudentAndEndDateIsNull(student)
+        .ifPresent(
+            current -> {
+              current.setEndDate(effectiveDate);
+              historyRepository.save(current);
+            });
 
     return toView(
-            historyRepository.save(
-                    StudentGroupHistory.builder()
-                            .student(student)
-                            .group(newGroup)
-                            .startDate(effectiveDate)
-                            .build()));
+        historyRepository.save(
+            StudentGroupHistory.builder()
+                .student(student)
+                .group(newGroup)
+                .startDate(effectiveDate)
+                .build()));
   }
 
   @Transactional(readOnly = true)
   public List<GroupAssignmentView> getHistory(User student) {
     return historyRepository.findByStudentOrderByStartDateAsc(student).stream()
-            .map(StudentGroupService::toView)
-            .toList();
+        .map(StudentGroupService::toView)
+        .toList();
   }
 
   @Transactional(readOnly = true)
   public Group getCurrentGroup(User student) {
     return historyRepository
-            .findByStudentAndEndDateIsNull(student)
-            .map(StudentGroupHistory::getGroup)
-            .orElse(null);
+        .findByStudentAndEndDateIsNull(student)
+        .map(StudentGroupHistory::getGroup)
+        .orElse(null);
   }
 
   public static GroupAssignmentView toView(StudentGroupHistory assignment) {
     return new GroupAssignmentView(
-            assignment.getId(),
-            assignment.getGroup().getId(),
-            assignment.getGroup().getRef(),
-            assignment.getStartDate(),
-            assignment.getEndDate());
+        assignment.getId(),
+        assignment.getGroup().getId(),
+        assignment.getGroup().getRef(),
+        assignment.getStartDate(),
+        assignment.getEndDate());
   }
 }

@@ -31,45 +31,49 @@ public class GradeService {
   private final ExamRepository examRepository;
   private final UserRepository userRepository;
 
-
+  /**
+   * Records a student's first grade for an exam. Later corrections go through {@link #updateGrade},
+   * which is the only path that writes history — so a first entry is never a "change without a
+   * reason".
+   */
   @Transactional
   public GradeView createGrade(CreateGradeRequest request, User requester) {
     if (requester.getRole() == Role.STUDENT) {
       throw new ForbiddenOperationException("Students cannot record grades");
     }
     User student =
-            userRepository
-                    .findById(request.studentId())
-                    .orElseThrow(
-                            () -> new ResourceNotFoundException("User not found: " + request.studentId()));
+        userRepository
+            .findById(request.studentId())
+            .orElseThrow(
+                () -> new ResourceNotFoundException("User not found: " + request.studentId()));
     if (student.getRole() != Role.STUDENT) {
       throw new IllegalArgumentException("Only students can be graded");
     }
     Exam exam =
-            examRepository
-                    .findById(request.examId())
-                    .orElseThrow(
-                            () -> new ResourceNotFoundException("Exam not found: " + request.examId()));
+        examRepository
+            .findById(request.examId())
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Exam not found: " + request.examId()));
     if (requester.getRole() == Role.TEACHER
-            && !exam.getCourseTeaching().getTeacher().getId().equals(requester.getId())) {
+        && !exam.getCourseTeaching().getTeacher().getId().equals(requester.getId())) {
       throw new ForbiddenOperationException(
-              "Teachers can only grade the exams of the courses they teach");
+          "Teachers can only grade the exams of the courses they teach");
     }
     if (gradeRepository.existsByStudentAndExam(student, exam)) {
       throw new IllegalArgumentException(
-              "This student already has a grade for exam "
-                      + exam.getRef()
-                      + "; use PUT /api/grades/{id} to correct it");
+          "This student already has a grade for exam "
+              + exam.getRef()
+              + "; use PUT /api/grades/{id} to correct it");
     }
     Grade saved =
-            gradeRepository.save(
-                    Grade.builder()
-                            .student(student)
-                            .exam(exam)
-                            .value(request.value())
-                            .lastModifiedAt(Instant.now())
-                            .lastModifiedBy(requester.getEmail())
-                            .build());
+        gradeRepository.save(
+            Grade.builder()
+                .student(student)
+                .exam(exam)
+                .value(request.value())
+                .lastModifiedAt(Instant.now())
+                .lastModifiedBy(requester.getEmail())
+                .build());
     return toView(saved);
   }
 
@@ -81,15 +85,15 @@ public class GradeService {
     var grades = gradeRepository.findByStudent(student);
     if (requester.getRole() == Role.TEACHER) {
       grades =
-              grades.stream()
-                      .filter(
-                              g ->
-                                      g.getExam()
-                                              .getCourseTeaching()
-                                              .getTeacher()
-                                              .getId()
-                                              .equals(requester.getId()))
-                      .toList();
+          grades.stream()
+              .filter(
+                  g ->
+                      g.getExam()
+                          .getCourseTeaching()
+                          .getTeacher()
+                          .getId()
+                          .equals(requester.getId()))
+              .toList();
     }
     return grades.stream().map(this::toView).toList();
   }
@@ -99,15 +103,15 @@ public class GradeService {
     Grade grade = getGradeOrThrow(gradeId);
     assertCanViewGrade(grade, requester);
     return gradeHistoryRepository.findByGradeOrderByChangedAtAsc(grade).stream()
-            .map(
-                    h ->
-                            new GradeHistoryView(
-                                    h.getPreviousValue(),
-                                    h.getNewValue(),
-                                    h.getReason(),
-                                    h.getChangedBy(),
-                                    h.getChangedAt()))
-            .toList();
+        .map(
+            h ->
+                new GradeHistoryView(
+                    h.getPreviousValue(),
+                    h.getNewValue(),
+                    h.getReason(),
+                    h.getChangedBy(),
+                    h.getChangedAt()))
+        .toList();
   }
 
   @Transactional
@@ -118,9 +122,9 @@ public class GradeService {
     Grade grade = getGradeOrThrow(gradeId);
 
     if (requester.getRole() == Role.TEACHER
-            && !grade.getExam().getCourseTeaching().getTeacher().getId().equals(requester.getId())) {
+        && !grade.getExam().getCourseTeaching().getTeacher().getId().equals(requester.getId())) {
       throw new ForbiddenOperationException(
-              "Teachers can only modify grades for the courses they teach");
+          "Teachers can only modify grades for the courses they teach");
     }
 
     var previousValue = grade.getValue();
@@ -130,14 +134,14 @@ public class GradeService {
     gradeRepository.save(grade);
 
     gradeHistoryRepository.save(
-            GradeHistory.builder()
-                    .grade(grade)
-                    .previousValue(previousValue)
-                    .newValue(request.value())
-                    .reason(request.reason())
-                    .changedBy(requester.getEmail())
-                    .changedAt(Instant.now())
-                    .build());
+        GradeHistory.builder()
+            .grade(grade)
+            .previousValue(previousValue)
+            .newValue(request.value())
+            .reason(request.reason())
+            .changedBy(requester.getEmail())
+            .changedAt(Instant.now())
+            .build());
 
     return toView(grade);
   }
@@ -145,8 +149,8 @@ public class GradeService {
   private void assertCanViewGrade(Grade grade, User requester) {
     boolean isSelf = requester.getId().equals(grade.getStudent().getId());
     boolean isOwningTeacher =
-            requester.getRole() == Role.TEACHER
-                    && grade.getExam().getCourseTeaching().getTeacher().getId().equals(requester.getId());
+        requester.getRole() == Role.TEACHER
+            && grade.getExam().getCourseTeaching().getTeacher().getId().equals(requester.getId());
     boolean isAdmin = requester.getRole() == Role.ADMIN;
     if (!isSelf && !isOwningTeacher && !isAdmin) {
       throw new ForbiddenOperationException("You are not allowed to view this grade's history");
@@ -155,17 +159,17 @@ public class GradeService {
 
   private Grade getGradeOrThrow(UUID gradeId) {
     return gradeRepository
-            .findById(gradeId)
-            .orElseThrow(() -> new ResourceNotFoundException("Grade not found: " + gradeId));
+        .findById(gradeId)
+        .orElseThrow(() -> new ResourceNotFoundException("Grade not found: " + gradeId));
   }
 
   private GradeView toView(Grade grade) {
     return new GradeView(
-            grade.getId(),
-            grade.getExam().getRef(),
-            grade.getExam().getCourseTeaching().getCourse().getTitle(),
-            grade.getExam().getCoefficient(),
-            grade.getValue(),
-            grade.getLastModifiedAt());
+        grade.getId(),
+        grade.getExam().getRef(),
+        grade.getExam().getCourseTeaching().getCourse().getTitle(),
+        grade.getExam().getCoefficient(),
+        grade.getValue(),
+        grade.getLastModifiedAt());
   }
 }

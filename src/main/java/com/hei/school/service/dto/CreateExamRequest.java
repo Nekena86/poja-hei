@@ -10,8 +10,9 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record CreateExamRequest(
-        @NotBlank String ref,
-        @NotNull UUID courseTeachingId,
-        @NotNull Instant dateExam,
-        @NotNull @DecimalMin("0.1") BigDecimal coefficient,
-        @Min(1) @Max(3) int academicYear) {}
+    @NotBlank String ref,
+    @NotNull UUID courseTeachingId,
+    @NotNull Instant dateExam,
+    @NotNull @DecimalMin("0.1") BigDecimal coefficient,
+    /** Which of the promotion's three years this exam belongs to. */
+    @Min(1) @Max(3) int academicYear) {}

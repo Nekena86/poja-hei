@@ -13,6 +13,7 @@ public class PromotionService {
 
   private final UserRepository userRepository;
 
+  /** Entry years that have at least one student, most recent first. */
   @Transactional(readOnly = true)
   public List<Integer> listPromotionYears() {
     return userRepository.findDistinctPromotionYears(Role.STUDENT);

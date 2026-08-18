@@ -5,9 +5,9 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record ExamView(
-        UUID id,
-        String ref,
-        String courseTitle,
-        Instant dateExam,
-        BigDecimal coefficient,
-        int academicYear) {}
+    UUID id,
+    String ref,
+    String courseTitle,
+    Instant dateExam,
+    BigDecimal coefficient,
+    int academicYear) {}

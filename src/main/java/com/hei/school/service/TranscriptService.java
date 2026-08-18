@@ -21,28 +21,28 @@ public class TranscriptService {
   @Transactional(readOnly = true)
   public List<TranscriptLine> getTranscriptLines(User student) {
     return gradeRepository.findByStudent(student).stream()
-            .map(
-                    g ->
-                            new TranscriptLine(
-                                    g.getExam().getCourseTeaching().getCourse().getTitle(),
-                                    g.getExam().getRef(),
-                                    g.getExam().getCoefficient(),
-                                    g.getValue()))
-            .toList();
+        .map(
+            g ->
+                new TranscriptLine(
+                    g.getExam().getCourseTeaching().getCourse().getTitle(),
+                    g.getExam().getRef(),
+                    g.getExam().getCoefficient(),
+                    g.getValue()))
+        .toList();
   }
 
   public BigDecimal weightedAverage(List<Grade> grades) {
     BigDecimal totalWeight =
-            grades.stream()
-                    .map(g -> g.getExam().getCoefficient())
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+        grades.stream()
+            .map(g -> g.getExam().getCoefficient())
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     if (totalWeight.compareTo(BigDecimal.ZERO) == 0) {
       return BigDecimal.ZERO;
     }
     BigDecimal weightedSum =
-            grades.stream()
-                    .map(g -> g.getValue().multiply(g.getExam().getCoefficient()))
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+        grades.stream()
+            .map(g -> g.getValue().multiply(g.getExam().getCoefficient()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     return weightedSum.divide(totalWeight, new MathContext(4, RoundingMode.HALF_UP));
   }
 }

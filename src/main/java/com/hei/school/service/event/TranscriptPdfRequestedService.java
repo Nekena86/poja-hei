@@ -29,10 +29,10 @@ public class TranscriptPdfRequestedService implements Consumer<TranscriptPdfRequ
   @Override
   public void accept(TranscriptPdfRequested event) {
     User student =
-            userRepository
-                    .findById(event.getStudentId())
-                    .orElseThrow(
-                            () -> new ResourceNotFoundException("Student not found: " + event.getStudentId()));
+        userRepository
+            .findById(event.getStudentId())
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Student not found: " + event.getStudentId()));
 
     var pdfFile = pdfTranscriptService.generate(student);
     String bucketKey = "transcripts/" + student.getId() + "-" + System.currentTimeMillis() + ".pdf";
@@ -40,16 +40,16 @@ public class TranscriptPdfRequestedService implements Consumer<TranscriptPdfRequ
     var downloadLink = bucketComponent.presign(bucketKey, Duration.ofDays(7));
 
     mailer.accept(
-            new Email(
-                    new InternetAddress(event.getRecipientEmail()),
-                    List.of(),
-                    List.of(),
-                    "Votre releve de notes",
-                    "Bonjour "
-                            + student.getFirstName()
-                            + ",\n\nVoici le lien pour telecharger votre releve de notes (valable 7 jours) :\n"
-                            + downloadLink
-                            + "\n\nCordialement.",
-                    List.of()));
+        new Email(
+            new InternetAddress(event.getRecipientEmail()),
+            List.of(),
+            List.of(),
+            "Votre releve de notes",
+            "Bonjour "
+                + student.getFirstName()
+                + ",\n\nVoici le lien pour telecharger votre releve de notes (valable 7 jours) :\n"
+                + downloadLink
+                + "\n\nCordialement.",
+            List.of()));
   }
 }
