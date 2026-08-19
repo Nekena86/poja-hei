@@ -154,12 +154,20 @@ dependencies {
     testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0'
 
 org.springframework.boot:spring-boot-starter-security:3.2.2
-org.apache.poi:poi-ooxml:5.3.0
-org.apache.pdfbox:pdfbox:2.0.31
-org.springframework.boot:spring-boot-starter-thymeleaf:3.2.2
 org.springframework.boot:spring-boot-starter-validation:3.2.2
+org.springframework.boot:spring-boot-starter-thymeleaf:3.2.2
+org.apache.poi:poi-oxml:5.3.0
+org.apache.pdfbox:pdfbox:2.0.31
 org.eclipse.angus:angus-mail:2.0.3
-org.eclipse.angus:angus-activation:2.0.2
+org.eclipse.angus:activation:2.0.2
+io.swagger:swagger-annotations:1.6.12
+org.projectlombok:lombok:1.18.30
+org.flywaydb:flyway-core:9.22.3
+org.postgresql:postgresql:42.6.0
+com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3
+org.apache.tika:tika-core:2.9.1
+org.reflections:reflections:0.10.2
+org.openapitools:jackson-databind-nullable:0.2.6
 
 
 }
