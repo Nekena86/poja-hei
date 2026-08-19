@@ -45,7 +45,6 @@ class PromotionApiIT {
         .andExpect(jsonPath("$.promotionYear").value(2022))
         .andExpect(jsonPath("$.studentCount").value(6))
         .andExpect(jsonPath("$.graduateCount").value(4))
-        // Ranked by overall average, so Jean Rakotobe (15.00) comes first.
         .andExpect(jsonPath("$.students[0].nom").value("Rakotobe"))
         .andExpect(jsonPath("$.students[0].overallAverage").value(15.00))
         .andExpect(jsonPath("$.students[0].graduated").value(true))
@@ -139,7 +138,6 @@ class PromotionApiIT {
             content().string(org.hamcrest.Matchers.containsString("<button type=\"submit\"")));
   }
 
-
   @Test
   void aStudentSeesTheirOwnGradesButNotAnotherStudentsGrades() throws Exception {
     String ownGradesPath = "/api/students/{id}/grades";
@@ -167,7 +165,6 @@ class PromotionApiIT {
         .andExpect(
             jsonPath("$[0].reason").value(org.hamcrest.Matchers.containsString("Reclamation")));
   }
-
 
   @Test
   void aStudentsGroupPathIsReadableFromStartToFinish() throws Exception {
@@ -235,7 +232,6 @@ class PromotionApiIT {
         .andExpect(status().isNotFound());
   }
 
-
   @Test
   void aStudentCanAskForTheirOwnTranscriptAndTheRequestReturnsImmediately() throws Exception {
     mockMvc
@@ -266,7 +262,6 @@ class PromotionApiIT {
                 .with(httpBasic(ADMIN, ADMIN_PASSWORD)))
         .andExpect(status().isNotFound());
   }
-
 
   private String idOf(String email) throws Exception {
     return switch (email) {

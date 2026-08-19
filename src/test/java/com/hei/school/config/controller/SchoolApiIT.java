@@ -476,7 +476,6 @@ class SchoolApiIT {
         .andExpect(status().isBadRequest());
   }
 
-
   @Test
   void listsCoursesAndGroups() throws Exception {
     createTeaching(createTeacher());
