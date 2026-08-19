@@ -19,10 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.ses.SesClient;
 import software.amazon.awssdk.services.ses.model.SendRawEmailRequest;
 
-/**
- * Guards the Jakarta Mail wiring: the API and its implementation have to agree, otherwise building
- * any message throws before SES is ever reached.
- */
 @ExtendWith(MockitoExtension.class)
 class MailerTest {
 

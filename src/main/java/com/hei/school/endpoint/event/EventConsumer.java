@@ -7,10 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-/**
- * Routes an event to its handler, following the POJA convention: the event {@code Foo} is handled
- * by the bean named {@code fooService}.
- */
 @Component
 @AllArgsConstructor
 @Slf4j
@@ -19,7 +15,6 @@ public class EventConsumer {
   private final ApplicationContext applicationContext;
   private final ObjectMapper objectMapper;
 
-  /** Rebuilds the event from a queue message, then dispatches it. */
   public void consume(String messageBody) {
     EventEnvelope envelope;
     try {
@@ -39,7 +34,6 @@ public class EventConsumer {
     consume((PojaEvent) objectMapper.convertValue(envelope.payload(), eventType));
   }
 
-  @SuppressWarnings("unchecked")
   public void consume(PojaEvent event) {
     String simpleName = event.getClass().getSimpleName();
     String beanName =

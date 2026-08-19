@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
-/** Publishes events on SQS; a worker Lambda consumes them (see EventHandler). */
 @AllArgsConstructor
 @Slf4j
 public class SqsEventProducer implements EventProducer {

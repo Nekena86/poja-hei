@@ -36,7 +36,6 @@ public class CourseController {
     return courseService.list();
   }
 
-  /** Assigns a teacher to teach a course to one group. */
   @PostMapping("/course-teachings")
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('ADMIN')")

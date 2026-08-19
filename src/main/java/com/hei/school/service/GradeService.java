@@ -31,11 +31,6 @@ public class GradeService {
   private final ExamRepository examRepository;
   private final UserRepository userRepository;
 
-  /**
-   * Records a student's first grade for an exam. Later corrections go through {@link #updateGrade},
-   * which is the only path that writes history — so a first entry is never a "change without a
-   * reason".
-   */
   @Transactional
   public GradeView createGrade(CreateGradeRequest request, User requester) {
     if (requester.getRole() == Role.STUDENT) {

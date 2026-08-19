@@ -16,10 +16,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
   List<User> findByRoleAndPromotionYear(Role role, Integer promotionYear);
 
-  /**
-   * Derived queries cannot project "distinct" onto a single property — they select whole entities —
-   * so the projection has to be written out.
-   */
   @Query(
       "select distinct u.promotionYear from User u "
           + "where u.role = :role and u.promotionYear is not null "

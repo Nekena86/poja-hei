@@ -9,10 +9,6 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/**
- * Worker entry point: consumes the events published on SQS by SqsEventProducer. All the dispatch
- * logic lives in {@link EventConsumer}, which is unit-tested; this class is only the AWS shell.
- */
 public class EventHandler implements RequestHandler<SQSEvent, Void> {
 
   private static final ConfigurableApplicationContext CONTEXT =

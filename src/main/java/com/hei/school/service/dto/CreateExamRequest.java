@@ -14,5 +14,4 @@ public record CreateExamRequest(
     @NotNull UUID courseTeachingId,
     @NotNull Instant dateExam,
     @NotNull @DecimalMin("0.1") BigDecimal coefficient,
-    /** Which of the promotion's three years this exam belongs to. */
     @Min(1) @Max(3) int academicYear) {}

@@ -28,7 +28,6 @@ import org.springframework.core.task.SyncTaskExecutor;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
-/** The two ways an event leaves the HTTP thread: a real queue, or a local worker thread. */
 @ExtendWith(MockitoExtension.class)
 class EventTransportTest {
 
@@ -139,7 +138,6 @@ class EventTransportTest {
         new LocalAsyncEventProducer(
             new EventConsumer(applicationContext, objectMapper), new SyncTaskExecutor());
 
-    // Nothing is waiting on the result any more, so the failure is logged, not thrown.
     producer.accept(List.of(event));
 
     verify(sqsClient, never()).sendMessage(any(SendMessageRequest.class));

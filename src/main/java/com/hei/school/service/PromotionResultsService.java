@@ -18,16 +18,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * A promotion's results across the three years of the curriculum — the admin-only view the brief
- * asks for. Each year is averaged on its own so a weak year stays visible instead of being diluted
- * into the overall average.
- */
 @Service
 @AllArgsConstructor
 public class PromotionResultsService {
 
-  /** A HEI promotion spans three academic years. */
   public static final int PROMOTION_LENGTH_YEARS = 3;
 
   private final UserRepository userRepository;

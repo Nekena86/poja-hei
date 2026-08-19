@@ -11,10 +11,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
 
-/**
- * Picks the event transport from {@code app.events.transport}: {@code sqs} (the default, used in
- * deployed environments) or {@code local}.
- */
 @Configuration
 public class EventConf {
 

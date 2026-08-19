@@ -22,10 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Walks the whole API the way a user would: the admin sets the school up, a teacher grades, a
- * student reads their own results. Everything runs against the throwaway PostgreSQL container.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
@@ -37,7 +33,6 @@ class SchoolApiIT {
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
 
-  /** Seeded by V42_4, so it exists in every environment. */
   private static final String ADMIN = "admin@hei.school";
 
   private String uniqueSuffix;
@@ -46,8 +41,6 @@ class SchoolApiIT {
   void setUp() {
     uniqueSuffix = Long.toString(System.nanoTime());
   }
-
-  // ------------------------------------------------------------------ helpers
 
   private JsonNode postAsAdmin(String path, String json) throws Exception {
     var body =
@@ -123,8 +116,6 @@ class SchoolApiIT {
     return UUID.fromString(exam.get("id").asText());
   }
 
-  // ------------------------------------------------------------------ the happy path
-
   @Test
   void adminSetsUpTheSchoolThenATeacherGradesAndTheStudentReadsTheirGrades() throws Exception {
     UUID teacherId = createTeacher();
@@ -134,7 +125,6 @@ class SchoolApiIT {
     String teacherEmail = "teacher-" + uniqueSuffix + "@hei.school";
     String studentEmail = "student-a-" + uniqueSuffix + "@hei.school";
 
-    // The owning teacher records the grade.
     var gradeBody =
         mockMvc
             .perform(
@@ -151,14 +141,12 @@ class SchoolApiIT {
             .getContentAsString();
     UUID gradeId = UUID.fromString(objectMapper.readTree(gradeBody).get("id").asText());
 
-    // The student sees their own grade.
     mockMvc
         .perform(
             get("/api/students/{id}/grades", studentId).with(httpBasic(studentEmail, PASSWORD)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[0].value").value(14.5));
 
-    // The teacher corrects it, and must say why.
     mockMvc
         .perform(
             withJson(
@@ -169,7 +157,6 @@ class SchoolApiIT {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.value").value(16.0));
 
-    // The correction is kept, with its reason.
     mockMvc
         .perform(get("/api/grades/{id}/history", gradeId).with(httpBasic(teacherEmail, PASSWORD)))
         .andExpect(status().isOk())
@@ -245,8 +232,6 @@ class SchoolApiIT {
         .andExpect(status().isBadRequest());
   }
 
-  // ------------------------------------------------------------------ authorisation
-
   @Test
   void aTeacherCannotGradeAnExamOfACourseTheyDoNotTeach() throws Exception {
     UUID owningTeacher = createTeacher();
@@ -307,8 +292,6 @@ class SchoolApiIT {
             get("/api/students/{id}/grades", UUID.randomUUID()).with(httpBasic(ADMIN, "admin123")))
         .andExpect(status().isNotFound());
   }
-
-  // ------------------------------------------------------------------ validation of the model
 
   @Test
   void aStudentMustBelongToAPromotion() throws Exception {
@@ -493,7 +476,6 @@ class SchoolApiIT {
         .andExpect(status().isBadRequest());
   }
 
-  // ------------------------------------------------------------------ reading lists
 
   @Test
   void listsCoursesAndGroups() throws Exception {

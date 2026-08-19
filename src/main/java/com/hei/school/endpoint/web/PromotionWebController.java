@@ -12,7 +12,6 @@ public class PromotionWebController {
 
   private final PromotionService promotionService;
 
-  /** The promotions page is the only screen, so it is what the root should open. */
   @GetMapping("/")
   public String home() {
     return "redirect:/promotions";

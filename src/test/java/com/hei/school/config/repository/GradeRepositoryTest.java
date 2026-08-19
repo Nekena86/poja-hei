@@ -96,8 +96,6 @@ class GradeRepositoryTest {
 
     var grades = gradeRepository.findAllForPromotion(2024);
 
-    // The demo dataset also holds 2024 students, so assert on membership rather than on a
-    // total: the 2024 student's grade is in, the 2023 one is not, and nothing else leaks in.
     assertThat(grades)
         .extracting(g -> g.getStudent().getEmail())
         .contains("repo-student-2024@school.io");

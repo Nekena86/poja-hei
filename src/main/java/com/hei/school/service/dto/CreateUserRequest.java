@@ -12,5 +12,4 @@ public record CreateUserRequest(
     @NotBlank String firstName,
     @NotBlank String lastName,
     @NotNull Role role,
-    /** Required for students (their entry year), left null for teachers and admins. */
     Integer promotionYear) {}

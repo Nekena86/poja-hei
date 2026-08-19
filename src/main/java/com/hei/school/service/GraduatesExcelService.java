@@ -21,18 +21,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Builds the "liste de diplomes" Excel export for a given promotion (entry year): rang, STD (the
- * student's identifier), nom, prenom, moyenne generale — ranked by descending average.
- *
- * <p>Only students who actually graduated are listed: a weighted average of at least {@link
- * #PASSING_AVERAGE} out of 20. Students with no grades at all therefore never appear.
- */
 @Service
 @AllArgsConstructor
 public class GraduatesExcelService {
 
-  /** Pass mark out of 20 that turns a student of the promotion into a graduate. */
   public static final BigDecimal PASSING_AVERAGE = BigDecimal.TEN;
 
   private final UserRepository userRepository;

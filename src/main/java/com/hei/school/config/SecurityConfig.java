@@ -39,9 +39,6 @@ public class SecurityConfig {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
             auth ->
-                // Rendering an error page is an internal ERROR dispatch. Without this it is
-                // itself rejected as unauthenticated, the body stays empty, and the browser
-                // shows a blank page instead of "401 Unauthorized".
                 auth.dispatcherTypeMatchers(DispatcherType.ERROR)
                     .permitAll()
                     .requestMatchers("/promotions/**")

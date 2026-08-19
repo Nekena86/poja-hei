@@ -23,7 +23,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", ex.getMessage()));
   }
 
-  /** Raised by @PreAuthorize when the caller's role is not allowed on this endpoint. */
   @ExceptionHandler(AccessDeniedException.class)
   public ResponseEntity<Map<String, String>> handleAccessDenied(AccessDeniedException ex) {
     return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -35,7 +34,6 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", ex.getMessage()));
   }
 
-  /** Turns bean-validation failures into a readable field-by-field message. */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Map<String, String>> handleInvalidBody(MethodArgumentNotValidException ex) {
     String details =

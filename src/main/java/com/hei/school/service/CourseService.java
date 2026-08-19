@@ -20,10 +20,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Courses, and who teaches them to whom. A course can be taught by several teachers and given to
- * several groups — each combination is one {@link CourseTeaching}.
- */
 @Service
 @AllArgsConstructor
 public class CourseService {

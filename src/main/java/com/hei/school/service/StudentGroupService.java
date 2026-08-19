@@ -18,11 +18,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Groups, and which group a student belongs to over time. A student can move at any point: the
- * previous assignment is closed on the effective date and a new one opens, so the whole path stays
- * readable.
- */
 @Service
 @AllArgsConstructor
 public class StudentGroupService {

@@ -21,10 +21,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Exercises the promotion-wide features against the demo dataset seeded by V42_4, whose averages
- * are known: promotion 2022 has six students and four of them graduate.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
@@ -85,7 +81,6 @@ class PromotionApiIT {
       }
     }
 
-    // Randria (7.86) and Naivo (6.00) are below the pass mark and must not appear.
     assertThat(names).containsExactly("Rakotobe", "Rasoa", "Andria", "Ravelo");
   }
 
@@ -140,12 +135,10 @@ class PromotionApiIT {
             content()
                 .string(
                     org.hamcrest.Matchers.containsString("/api/promotions/2022/graduates.xlsx")))
-        // The brief asks for a download button, not just a link.
         .andExpect(
             content().string(org.hamcrest.Matchers.containsString("<button type=\"submit\"")));
   }
 
-  // ------------------------------------------------------------------ grades a student may see
 
   @Test
   void aStudentSeesTheirOwnGradesButNotAnotherStudentsGrades() throws Exception {
@@ -164,7 +157,6 @@ class PromotionApiIT {
 
   @Test
   void theCorrectionMadeAfterAComplaintIsVisibleInTheHistory() throws Exception {
-    // Seeded: Paul Randria's first grade went from 6 to 8 after his complaint.
     mockMvc
         .perform(
             get("/api/grades/{id}/history", "20000000-0000-0000-0000-000000000007")
@@ -176,7 +168,6 @@ class PromotionApiIT {
             jsonPath("$[0].reason").value(org.hamcrest.Matchers.containsString("Reclamation")));
   }
 
-  // ------------------------------------------------------------------ groups over time
 
   @Test
   void aStudentsGroupPathIsReadableFromStartToFinish() throws Exception {
@@ -244,7 +235,6 @@ class PromotionApiIT {
         .andExpect(status().isNotFound());
   }
 
-  // ------------------------------------------------------------------ transcript by email
 
   @Test
   void aStudentCanAskForTheirOwnTranscriptAndTheRequestReturnsImmediately() throws Exception {
@@ -277,10 +267,8 @@ class PromotionApiIT {
         .andExpect(status().isNotFound());
   }
 
-  // ------------------------------------------------------------------ helpers
 
   private String idOf(String email) throws Exception {
-    // The seeded ids are fixed, so map the two students used here without a lookup endpoint.
     return switch (email) {
       case TOP_STUDENT -> "f0000000-0000-0000-0000-000000000001";
       case FAILED_STUDENT -> "f0000000-0000-0000-0000-000000000003";

@@ -22,7 +22,6 @@ public class GraduatesController {
   private final GraduatesExcelService graduatesExcelService;
   private final PromotionResultsService promotionResultsService;
 
-  /** The promotion's results over its three years — admin only, as the brief requires. */
   @GetMapping("/{year}/results")
   @PreAuthorize("hasRole('ADMIN')")
   public PromotionResults getResults(@PathVariable int year) {
