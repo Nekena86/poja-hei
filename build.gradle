@@ -153,16 +153,6 @@ dependencies {
     testImplementation 'org.testcontainers:testcontainers-junit-jupiter:2.0.2'
     testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0'
 
-   implementation 'org.springframework.boot:spring-boot-starter-security:3.2.2'
-   implementation 'org.springframework.boot:spring-boot-starter-validation:3.2.2'
-   implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.2.2'
-   implementation 'org.apache.poi:poi-ooxml:5.3.0'
-   implementation 'org.apache.pdfbox:pdfbox:2.0.31'
-   implementation 'org.eclipse.angus:angus-mail:2.0.3'
-   implementation 'org.eclipse.angus:angus-activation:2.0.2'
-   implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
-   testImplementation 'org.springframework.security:spring-security-test:6.2.1'
-   testImplementation 'org.testcontainers:postgresql:1.19.3'
 
 
 }
