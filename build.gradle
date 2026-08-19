@@ -150,18 +150,17 @@ dependencies {
     implementation 'io.swagger:swagger-annotations:1.6.12'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.2'
-    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.testcontainers:testcontainers-junit-jupiter:2.0.2'
     testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0'
 
-    implementation 'org.springframework.boot:spring-boot-starter-security:3.2.2'
-    implementation 'org.apache.poi:poi-ooxml:5.3.0'
-    implementation 'org.apache.pdfbox:pdfbox:2.0.31'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.2.2'
-    implementation 'org.springframework.boot:spring-boot-starter-validation:3.2.2'
-    implementation 'org.eclipse.angus:angus-mail:2.0.3'
-    implementation 'org.eclipse.angus:angus-activation:2.0.2'
-    implementation 'org.postgresql:postgresql:42.7.4'
+imorg.springframework.boot:spring-boot-starter-security
+org.apache.poi:poi-ooxml:5.3.0
+org.apache.pdfbox:pdfbox:2.0.31
+org.springframework.boot:spring-boot-starter-thymeleaf:3.2.2
+org.springframework.boot:spring-boot-starter-validation:3.2.2
+org.eclipse.angus:angus-mail:2.0.3
+org.eclipse.angus:angus-activation:2.0.2
+org.postgresql:postgresql:42.7.4
 
 
 }
