@@ -38,15 +38,17 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
-            auth ->
-                auth.dispatcherTypeMatchers(DispatcherType.ERROR)
-                    .permitAll()
-                    .requestMatchers("/promotions/**")
-                    .hasAnyRole("ADMIN", "TEACHER")
-                    .requestMatchers("/api/**")
-                    .authenticated()
-                    .anyRequest()
-                    .authenticated())
+          auth ->
+              auth.dispatcherTypeMatchers(DispatcherType.ERROR)
+                  .permitAll()
+                  .requestMatchers("/ping", "/health/**")
+                  .permitAll()
+                  .requestMatchers("/promotions/**")
+                  .hasAnyRole("ADMIN", "TEACHER")
+                  .requestMatchers("/api/**")
+                  .authenticated()
+                  .anyRequest()
+                  .authenticated())
         .httpBasic(basic -> {})
         .authenticationProvider(authenticationProvider());
     return http.build();
